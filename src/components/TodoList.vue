@@ -10,6 +10,7 @@
         :key="item.id" 
         :todo="item"
         v-on:todo-completed="completeTodo"
+        v-on:todo-deleted="deleteTodo"
       />
     </b-list-group>
 
@@ -70,8 +71,33 @@ export default {
 
     },
     completeTodo(todo){
+      // find the object at this index, and set its 'done' attribute to true
       const todoIndex = this.list.indexOf(todo);
       this.list[todoIndex].done = true;
+    },
+    deleteTodo(todo){
+      // find the object at this index, and set its 'done' attribute to true
+      const todoIndex = this.list.indexOf(todo);
+      console.log(todoIndex)
+      this.list.splice(todoIndex,1);
+    },
+  },
+  watch:{
+    // add a watch on our 'list' defined above
+    list: {
+      handler() {
+        console.log('something changed!');
+        // localStorage can only save strings, have to use JSON.stringify on it
+        localStorage.setItem('todo_list', JSON.stringify(this.list));
+      }
+    }
+  },
+  // mounted is called when the app has been created within the DOM
+  mounted(){
+    console.log('app mounted');
+    if(localStorage.getItem('todo_list')){
+      // the array was stringified, so use JSON.parse to convert it back into JSON
+      this.list = JSON.parse(localStorage.getItem('todo_list'));
     }
   }
 }

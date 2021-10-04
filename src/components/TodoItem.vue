@@ -4,6 +4,7 @@
   <span v-else>{{ todo.text }}</span>
   <span v-if="todo.done" class="float-end">&#128077;</span>
   <b-button v-else class="float-end" pill variant="outline-success" @click="completeTodo()">&#10003;</b-button>
+  <b-button class="float-end" pill variant="outline-danger" @click="deleteTodo()">&#10060;</b-button>
 </b-list-group-item>
 </template>
 <script>
@@ -17,7 +18,14 @@ export default {
   },
   methods: {
     completeTodo() {
+      // emitting a custom event - it says 'something happened'
+      // @click and @keyUp are both also events
+      // so we an emit a todo-completed event, and pass the todo object which was completed
+      // 'passing a payload'
       this.$emit("todo-completed", this.todo);
+    },
+    deleteTodo(){
+      this.$emit("todo-deleted", this.todo);
     }
   }
 }
