@@ -74,21 +74,27 @@ export default {
       // find the object at this index, and set its 'done' attribute to true
       const todoIndex = this.list.indexOf(todo);
       this.list[todoIndex].done = true;
+      this.saveList();
     },
     deleteTodo(todo){
-      // find the object at this index, and set its 'done' attribute to true
+      // find the object at this index, and splice it from the array
       const todoIndex = this.list.indexOf(todo);
       console.log(todoIndex)
       this.list.splice(todoIndex,1);
+      this.saveList();
     },
+    saveList(){
+      localStorage.setItem('todo_list', JSON.stringify(this.list));
+    }
   },
   watch:{
     // add a watch on our 'list' defined above
     list: {
+      // so we tell vue to 'watch' our list, and if something related to the list changes, run our handler() method
       handler() {
         console.log('something changed!');
         // localStorage can only save strings, have to use JSON.stringify on it
-        localStorage.setItem('todo_list', JSON.stringify(this.list));
+        this.saveList();
       }
     }
   },
